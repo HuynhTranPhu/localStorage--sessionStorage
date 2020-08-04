@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TO do list</title>
+    <title>To do list</title>
 </head>
 <body>
     <input id="in" type="text" >
@@ -12,16 +12,21 @@
     <ul id="todo-list">
 
     </ul>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script> 
-        var storageKey = 'toDoList';
-        var dataString = localStorage.getItem(storageKey); 
-        var toDoList;
-        if(dataString){
-            toDoList = JSON.parse(dataString);
-        }else{
-            toDoList = [];
-        }
-
+        // var storageKey = 'toDoList';
+        // var dataString = localStorage.getItem(storageKey); 
+        // var toDoList;
+        // if(dataString){
+        //     toDoList = JSON.parse(dataString);
+        // }else{
+        //     toDoList = [];
+        // }
+        var url= 'http://localhost:9081/todos';
+        axios.get(url).then(function(res){
+            var items = res.data ;
+            render(items);
+        });
         var addBtn = document.getElementById('add-btn');
         var input = document.getElementById('in');
         input.value = sessionStorage.getItem('draft');
@@ -43,16 +48,16 @@
             toDoList.push(newItem);
             render();
             input.value='';
-            localStorage.setItem(storageKey,JSON.stringify(toDoList));
+            //localStorage.setItem(storageKey,JSON.stringify(toDoList));
         }
-        function render(){
+        function render(items){
             var htmlList = document.getElementById('todo-list'); 
-            var content = toDoList.map(function(item){
-                return '<li>' +item + '</li>';
+            var content = items.map(function(item){
+                return '<li>' +item.content + '</li>';
             });
             htmlList.innerHTML=content.join('');
         }
-        render();
+        //render();
     </script>
 </body>
 </html>
